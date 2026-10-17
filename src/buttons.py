@@ -1,4 +1,8 @@
 from customtkinter import *
+from PIL import Image
+import os
+import sys
+from pathlib import Path
 
 class Buttons(CTkFrame):
 	def __init__(self, master, **kwargs):
@@ -44,8 +48,39 @@ class Buttons(CTkFrame):
 
 		self.margin_y.grid(row=2, column=0, padx=0)
 
-	def pack_sprites(_):
-		filenames = filedialog.askopenfilenames(initialdir = "/",
+	def pack_sprites(self):
+		filenames = filedialog.askopenfilenames(initialdir = "D:/Downloads",
 						  title = "Select Files",
 						  filetypes = [("Png files", "*.png")])
 		print(filenames)
+		files = [f for f in filenames]
+		files.sort()
+
+		images = [Image.open(f) for f in files]
+
+		if not images:
+		    raise ValueError("No PNG images found in the folder.")
+
+		max_width = max(img.width for img in images)
+		max_height = max(img.height for img in images)
+
+		spacing = max(max_width, max_height)
+
+		output_path = (str(max_width) + ' ' + str(max_height) + ".png")
+
+		total_width = len(images) * spacing
+		total_height = max_height
+
+		canvas = Image.new("RGBA", (total_width, total_height), (0, 0, 0, 0))
+
+		for i, img in enumerate(images):
+		    x = i * spacing
+		    y = (max_height - img.height) // 2  # vertically center
+		    canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
+
+		self.margin_x.configure(text="X: " + str(max_width))
+		self.margin_y.configure(text="Y: " + str(max_height))
+
+		# Save result
+		canvas.save(output_path)
+
