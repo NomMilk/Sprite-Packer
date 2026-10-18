@@ -32,7 +32,7 @@ class Packer(CTk):
 		self.title_label.grid(row=0, column=0, padx=(0, 350), pady=10)
 
 		self.button_area = Buttons(master=self)
-		self.button_area.grid(row=1, column=0, padx=(0, 350), pady=10)
+		self.button_area.grid(row=1, column=0, padx=(0, 0), pady=(200, 0))
 
 if __name__ == "__main__":
 	app = Packer()
