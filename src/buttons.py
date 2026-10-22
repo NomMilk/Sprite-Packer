@@ -45,6 +45,7 @@ class Buttons(CTkFrame):
 		max_height = max(img.height for img in images)
 
 		spacing_width = max_width
+		spacing_height = max_height
 
 		general_path = filedialog.askdirectory()
 		output_path = general_path + ('/' + str(max_width) + ' ' + str(max_height) + ".png")
