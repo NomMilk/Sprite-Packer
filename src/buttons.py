@@ -41,23 +41,20 @@ class Buttons(CTkFrame):
 
 		self.button_pack.configure(text="Loading...")
 
-		max_width = max(img.width for img in images)
-		max_height = max(img.height for img in images)
-
-		spacing_width = max_width
-		spacing_height = max_height
+		spacing_width = max(img.width for img in images)
+		spacing_height = max(img.height for img in images)
 
 		general_path = filedialog.askdirectory()
-		output_path = general_path + ('/' + str(max_width) + ' ' + str(max_height) + ".png")
+		output_path = general_path + ('/' + str(spacing_width) + ' ' + str(spacing_height) + ".png")
 
 		total_width = len(images) * spacing_width
-		total_height = max_height
+		total_height = spacing_height 
 
 		canvas = Image.new("RGBA", (total_width, total_height), (0, 0, 0, 0))
 
 		for i, img in enumerate(images):
-		    x = i * spacing
-		    y = (max_height - img.height) // 2  # vertically center
+		    x = i * spacing_width
+		    y = (spacing_height - img.height) // 2  # vertically center
 		    canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
 
 		canvas.save(output_path)
