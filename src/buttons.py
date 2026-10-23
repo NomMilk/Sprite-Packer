@@ -2,6 +2,7 @@ from customtkinter import *
 from PIL import Image
 import os
 import sys
+import math
 from pathlib import Path
 
 class Buttons(CTkFrame):
@@ -40,22 +41,36 @@ class Buttons(CTkFrame):
 		    raise ValueError("No PNG images found in the folder.")
 
 		self.button_pack.configure(text="Loading...")
-
+		
 		spacing_width = max(img.width for img in images)
 		spacing_height = max(img.height for img in images)
 
 		general_path = filedialog.askdirectory()
 		output_path = general_path + ('/' + str(spacing_width) + ' ' + str(spacing_height) + ".png")
 
-		total_width = len(images) * spacing_width
-		total_height = spacing_height 
+		amtOfX = 1
+		amtOfY = len(images)
+
+		total_width = amtOfX * spacing_width
+		total_height = amtOfY * spacing_height 
+		
+		while total_height > total_width:
+			amtOfX += 1
+			amtOfY = math.ceil(len(images) / amtOfX)
+
+			total_width = amtOfX * spacing_width
+			total_height = amtOfY * spacing_height 
+		
+		print(amtOfX, amtOfY)
 
 		canvas = Image.new("RGBA", (total_width, total_height), (0, 0, 0, 0))
 
-		for i, img in enumerate(images):
-		    x = i * spacing_width
-		    y = (spacing_height - img.height) // 2  # vertically center
-		    canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
+		for I in range(amtOfX):
+			x = I * spacing_width
+			for II in range(amtOfY):
+				img = images[I + (II - 1) * amtOfX]
+				y = (II * spacing_height) + (spacing_height - img.height) // 2
+				canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
 
 		canvas.save(output_path)
 		self.master.destroy()
