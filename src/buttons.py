@@ -68,7 +68,10 @@ class Buttons(CTkFrame):
 		for I in range(amtOfX):
 			x = I * spacing_width
 			for II in range(amtOfY):
-				img = images[I + (II - 1) * amtOfX]
+				print(I + II * amtOfX)
+				if (I + II * amtOfX) > len(images) - 1:
+					continue
+				img = images[I + II * amtOfX]
 				y = (II * spacing_height) + (spacing_height - img.height) // 2
 				canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
 
